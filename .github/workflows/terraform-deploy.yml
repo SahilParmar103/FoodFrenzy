@@ -31,6 +31,8 @@ jobs:
     - name: Terraform Plan
       working-directory: terraform
       run: terraform plan -out=tfplan
+      env:
+        TF_VAR_ec2_private_key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
     - name: Terraform Apply
       working-directory: terraform
@@ -42,4 +44,4 @@ jobs:
       working-directory: terraform
       run: |
         echo "SonarQube EC2 IP:"
-        terraform output -raw ec2_public_ip || echo "Output not available."
+        terraform output -raw PUBLIC-IP || echo "Output not available."
