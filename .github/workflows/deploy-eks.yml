@@ -25,7 +25,13 @@ jobs:
 
     - name: Update Kubeconfig for EKS
       run: |
-        aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+        aws eks update-kubeconfig \
+          --region ${{ env.AWS_REGION }} \
+          --name ${{ env.EKS_CLUSTER_NAME }}
+
+    - name: Verify Kube Access
+      run: |
+        kubectl get nodes
 
     - name: Install Helm
       uses: azure/setup-helm@v3
