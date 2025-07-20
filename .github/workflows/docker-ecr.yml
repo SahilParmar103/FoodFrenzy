@@ -1,0 +1,42 @@
+name: Docker Build & Push to ECR
+
+on:
+  #push:
+    #branches: [ main ]
+  workflow_dispatch:
+
+env:
+  ECR_REPOSITORY: foodfrenzy
+  AWS_REGION: us-east-1
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build Docker Image
+      run: |
+        docker build -t $ECR_REPOSITORY:${{ github.sha }} .
+
+    - name: Tag and Push to ECR
+      run: |
+        IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        docker tag $ECR_REPOSITORY:${{ github.sha }} $IMAGE_URI
+        docker push $IMAGE_URI
+
+    - name: Output Image URI
+      run: echo "Image pushed to ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}"
