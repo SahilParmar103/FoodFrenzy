@@ -61,8 +61,9 @@ variable "server_name" {
   type        = string
 }
 
+
 variable "ec2_private_key" {
+  description = "The private SSH key for EC2 remote-exec"
   type        = string
-  description = "Private key for SSH"
   sensitive   = true
 }
