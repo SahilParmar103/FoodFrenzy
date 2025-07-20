@@ -28,9 +28,13 @@ jobs:
       working-directory: terraform
       run: terraform init
 
+    - name: Terraform Plan
+      working-directory: terraform
+      run: terraform plan -out=tfplan
+
     - name: Terraform Apply
       working-directory: terraform
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve tfplan
       env:
         TF_VAR_ec2_private_key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
