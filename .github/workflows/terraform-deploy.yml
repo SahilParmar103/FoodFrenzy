@@ -31,6 +31,8 @@ jobs:
     - name: Terraform Apply
       working-directory: terraform
       run: terraform apply -auto-approve
+      env:
+        TF_VAR_ec2_private_key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
 
     - name: Output EC2 Public IP
       working-directory: terraform
