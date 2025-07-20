@@ -60,3 +60,9 @@ variable "server_name" {
   description = "EC2 Server Name"
   type        = string
 }
+
+variable "ec2_private_key" {
+  type        = string
+  description = "Private key for SSH"
+  sensitive   = true
+}
