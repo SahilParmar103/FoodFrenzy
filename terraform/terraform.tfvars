@@ -3,6 +3,7 @@ region_name = "us-east-1"
 ec2_key_pair = "key"
 server_name = "My-server"
 key_name = "key"
+volume_size   = 30
 instance_type= "t2.medium"
 ami = "ami-0c02fb55956c7d316"
 rds_db_username    = "admin"
