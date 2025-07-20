@@ -1,8 +1,9 @@
 resource "aws_security_group" "my-sg" {
   name        = "SonarserverPorts"
   description = "Sonar Server Ports"
+  vpc_id      = module.vpc.vpc_id  # Required to avoid VPCIdNotSpecified error
 
-  # Port 22 is required for SSH Access
+  # SSH
   ingress {
     description = "SSH Port"
     from_port   = 22
@@ -11,7 +12,7 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 80 is required for HTTP
+  # HTTP
   ingress {
     description = "HTTP Port"
     from_port   = 80
@@ -20,7 +21,7 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 443 is required for HTTPS
+  # HTTPS
   ingress {
     description = "HTTPS Port"
     from_port   = 443
@@ -29,25 +30,25 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 2379-2380 is required for etcd-cluster
+  # etcd-cluster
   ingress {
-    description = "etc-cluster Port"
+    description = "Etcd Cluster"
     from_port   = 2379
     to_port     = 2380
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 3000 is required for Grafana
+  # Grafana
   ingress {
-    description = "NPM Port"
+    description = "Grafana Port"
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 6443 is required for KubeAPIServer
+  # KubeAPIServer
   ingress {
     description = "Kube API Server"
     from_port   = 6443
@@ -56,7 +57,7 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 8080 is required for Jenkins
+  # Jenkins
   ingress {
     description = "Jenkins Port"
     from_port   = 8080
@@ -65,7 +66,7 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 9000 is required for SonarQube
+  # SonarQube
   ingress {
     description = "SonarQube Port"
     from_port   = 9000
@@ -74,7 +75,7 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 9090 is required for Prometheus
+  # Prometheus
   ingress {
     description = "Prometheus Port"
     from_port   = 9090
@@ -83,7 +84,7 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 9100 is required for Prometheus metrics server
+  # Prometheus Node Exporter
   ingress {
     description = "Prometheus Metrics Port"
     from_port   = 9100
@@ -92,25 +93,25 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 10250-10260 is required for K8s
+  # Kubernetes Ports
   ingress {
-    description = "K8s Ports"
+    description = "Kubernetes Ports"
     from_port   = 10250
     to_port     = 10260
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Port 30000-32767 is required for NodePort
+  # NodePort Range
   ingress {
-    description = "K8s NodePort"
+    description = "K8s NodePort Range"
     from_port   = 30000
     to_port     = 32767
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Define outbound rules to allow all
+  # All egress allowed
   egress {
     from_port   = 0
     to_port     = 0
@@ -119,12 +120,12 @@ resource "aws_security_group" "my-sg" {
   }
 }
 
-# STEP2: CREATE EC2 USING PEM & SG
 resource "aws_instance" "my-ec2" {
-  ami                    = var.ami
-  instance_type          = var.instance_type
-  key_name               = var.key_name
-  vpc_security_group_ids = [aws_security_group.my-sg.id]
+  ami                         = var.ami
+  instance_type               = var.instance_type
+  key_name                    = var.key_name
+  subnet_id                   = module.vpc.public_subnets[0] # Must attach to subnet
+  vpc_security_group_ids      = [aws_security_group.my-sg.id]
 
   root_block_device {
     volume_size = var.volume_size
@@ -134,12 +135,10 @@ resource "aws_instance" "my-ec2" {
     Name = var.server_name
   }
 
-  # USING REMOTE-EXEC PROVISIONER TO INSTALL PACKAGES
   provisioner "remote-exec" {
-    # ESTABLISHING SSH CONNECTION WITH EC2
     connection {
       type        = "ssh"
-      private_key = var.ec2_private_key 
+      private_key = var.ec2_private_key
       user        = "ubuntu"
       host        = self.public_ip
     }
