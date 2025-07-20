@@ -1,9 +1,8 @@
 resource "aws_security_group" "my-sg" {
   name        = "SonarserverPorts"
   description = "Sonar Server Ports"
-  vpc_id      = module.vpc.vpc_id  # Required to avoid VPCIdNotSpecified error
+  vpc_id      = module.vpc.vpc_id
 
-  # SSH
   ingress {
     description = "SSH Port"
     from_port   = 22
@@ -12,7 +11,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # HTTP
   ingress {
     description = "HTTP Port"
     from_port   = 80
@@ -21,7 +19,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # HTTPS
   ingress {
     description = "HTTPS Port"
     from_port   = 443
@@ -30,7 +27,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # etcd-cluster
   ingress {
     description = "Etcd Cluster"
     from_port   = 2379
@@ -39,7 +35,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Grafana
   ingress {
     description = "Grafana Port"
     from_port   = 3000
@@ -48,7 +43,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # KubeAPIServer
   ingress {
     description = "Kube API Server"
     from_port   = 6443
@@ -57,7 +51,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Jenkins
   ingress {
     description = "Jenkins Port"
     from_port   = 8080
@@ -66,7 +59,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # SonarQube
   ingress {
     description = "SonarQube Port"
     from_port   = 9000
@@ -75,7 +67,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Prometheus
   ingress {
     description = "Prometheus Port"
     from_port   = 9090
@@ -84,7 +75,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Prometheus Node Exporter
   ingress {
     description = "Prometheus Metrics Port"
     from_port   = 9100
@@ -93,7 +83,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Kubernetes Ports
   ingress {
     description = "Kubernetes Ports"
     from_port   = 10250
@@ -102,7 +91,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # NodePort Range
   ingress {
     description = "K8s NodePort Range"
     from_port   = 30000
@@ -111,7 +99,6 @@ resource "aws_security_group" "my-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # All egress allowed
   egress {
     from_port   = 0
     to_port     = 0
@@ -124,7 +111,8 @@ resource "aws_instance" "my-ec2" {
   ami                         = var.ami
   instance_type               = var.instance_type
   key_name                    = var.key_name
-  subnet_id                   = module.vpc.public_subnets[0] # Must attach to subnet
+  subnet_id                   = module.vpc.public_subnets[0]
+  associate_public_ip_address = true # ✅ This fixes the host resolution for remote-exec
   vpc_security_group_ids      = [aws_security_group.my-sg.id]
 
   root_block_device {
