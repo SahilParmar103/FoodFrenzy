@@ -1,9 +1,11 @@
 variable "aws_region" {
-  default = "us-east-1"
+  description = "AWS region to deploy resources in"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "ec2_key_pair" {
-  description = "The name of the EC2 Key Pair"
+  description = "Name of the EC2 Key Pair"
   type        = string
 }
 
@@ -19,9 +21,42 @@ variable "rds_db_password" {
 }
 
 variable "rds_instance_class" {
-  default = "db.t3.micro"
+  description = "RDS instance type"
+  type        = string
+  default     = "db.t3.micro"
 }
 
 variable "rds_storage_size" {
-  default = 20
+  description = "Allocated storage for RDS"
+  type        = number
+  default     = 20
+}
+variable "instance_type" {
+  description = "Instance Type"
+  type        = string
+}
+
+variable "ami" {
+  description = "AMI ID"
+  type        = string
+}
+
+variable "key_name" {
+  description = "Key Pair"
+  type        = string
+}
+
+variable "volume_size" {
+  description = "Volume size"
+  type        = string
+}
+
+variable "region_name" {
+  description = "AWS Region"
+  type        = string
+}
+
+variable "server_name" {
+  description = "EC2 Server Name"
+  type        = string
 }
