@@ -1,0 +1,38 @@
+name: Deploy to EKS with Helm
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: foodfrenzy
+  EKS_CLUSTER_NAME: foodfrenzy-eks
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Update Kubeconfig for EKS
+      run: |
+        aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+
+    - name: Deploy with Helm
+      run: |
+        helm upgrade --install foodfrenzy ./helm-chart \
+          --set image.repository=474668397798.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy \
+          --set image.tag=latest \
+          --namespace default
