@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: <your-aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy
+  repository: 474668397798.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy
   tag: latest
   pullPolicy: IfNotPresent
 
