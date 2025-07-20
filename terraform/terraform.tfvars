@@ -1,6 +1,7 @@
 aws_region   = "us-east-1"
 region_name = "us-east-1"
 ec2_key_pair = "key"
+server_name = "My-server"
 key_name = "key"
 instance_type= "t2.medium"
 ami = "ami-0c02fb55956c7d316"
