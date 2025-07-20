@@ -6,7 +6,7 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 resource "aws_db_instance" "postgres" {
   identifier             = "foodfrenzy-db"
   engine                 = "postgres"
-  engine_version         = "15.4"
+  engine_version         = "15.3" # ✅ FIXED from 15.4 to 15.3
   instance_class         = var.rds_instance_class
   username               = var.rds_db_username
   password               = var.rds_db_password
