@@ -1,0 +1,39 @@
+name: CI Build and SonarQube Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Java 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+
+    - name: Build and Test
+      run: |
+        mvn clean install -DskipTests
+        mvn test
+
+    - name: Wait for SonarQube
+      run: |
+        for i in {1..30}; do
+          if curl -s "${{ secrets.SONAR_HOST_URL }}/api/system/health" | grep -q '"status":"GREEN"'; then
+            echo "SonarQube is ready!"
+            break
+          fi
+          echo "Waiting for SonarQube... ($i)"
+          sleep 10
+        done
+
+    - name: SonarQube Analysis
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        mvn sonar:sonar           -Dsonar.projectKey=FoodFrenzy           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
