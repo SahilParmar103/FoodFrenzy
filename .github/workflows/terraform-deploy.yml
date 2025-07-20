@@ -25,12 +25,15 @@ jobs:
         aws-region: us-east-1
 
     - name: Terraform Init
+      working-directory: terraform
       run: terraform init
 
     - name: Terraform Apply
+      working-directory: terraform
       run: terraform apply -auto-approve
 
     - name: Output EC2 Public IP
+      working-directory: terraform
       run: |
         echo "SonarQube EC2 IP:"
         terraform output -raw ec2_public_ip || echo "Output not available."
