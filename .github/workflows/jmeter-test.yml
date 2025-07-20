@@ -1,0 +1,32 @@
+name: JMeter Load Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup JMeter
+      run: |
+        sudo apt update -y
+        sudo apt install -y openjdk-11-jre wget unzip
+        wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.zip
+        unzip apache-jmeter-5.6.3.zip
+        export JMETER_HOME=$(pwd)/apache-jmeter-5.6.3
+        echo "$JMETER_HOME/bin" >> $GITHUB_PATH
+
+    - name: Run JMeter Test
+      run: |
+        mkdir -p test-results
+        apache-jmeter-5.6.3/bin/jmeter -n -t jmeter/load-test.jmx -l test-results/result.jtl -e -o test-results/report
+
+    - name: Upload Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: jmeter-report
+        path: test-results/report
