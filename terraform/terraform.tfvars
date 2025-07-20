@@ -1,6 +1,6 @@
 aws_region   = "us-east-1"
 region_name = "us-east-1"
-ec2_key_pair = "key"
+ec2_key_pair = "My-key"
 server_name = "My-server"
 key_name = "key"
 volume_size = 30
