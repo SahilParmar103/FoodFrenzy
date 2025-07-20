@@ -53,9 +53,11 @@ module "eks" {
   vpc_id                         = module.vpc.vpc_id
   cluster_endpoint_public_access = true
 
-  iam_role_name   = aws_iam_role.eks_role.name
-  create_iam_role = false
-  #cluster_iam_role_arn = aws_iam_role.eks_role.arn
+  enable_irsa = true  # ✅ Enable OIDC/IRSA for ALB ingress controller
+
+  iam_role_name        = aws_iam_role.eks_role.name
+  create_iam_role      = false
+  cluster_iam_role_arn = aws_iam_role.eks_role.arn
 
   eks_managed_node_groups = {
     default = {
