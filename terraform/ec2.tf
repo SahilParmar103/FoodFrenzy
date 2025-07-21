@@ -14,7 +14,28 @@ resource "aws_iam_role" "ec2_eks_access_role" {
     }]
   })
 }
+resource "aws_iam_role_policy" "allow_describe_cluster" {
+  name = "AllowEKSDescribe"
+  role = aws_iam_role.ec2_eks_access_role.id
 
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "eks:DescribeCluster"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "EC2EKSAccessProfile"
+  role = aws_iam_role.ec2_eks_access_role.name
+}
 resource "aws_iam_role_policy_attachment" "eks_access_attach" {
   role       = aws_iam_role.ec2_eks_access_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
