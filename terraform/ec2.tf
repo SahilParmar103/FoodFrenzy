@@ -127,7 +127,7 @@ resource "aws_security_group" "my-sg" {
 resource "aws_instance" "my-ec2" {
   ami           = var.ami   
   instance_type = var.instance_type
-  key_name      = var.ec2_private_key
+  key_name      = var.ec2_key_pair
   subnet_id     = module.vpc.public_subnets[0] 
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   
