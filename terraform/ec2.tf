@@ -14,8 +14,8 @@ resource "aws_iam_role" "ec2_eks_access_role" {
     }]
   })
 }
-resource "aws_iam_role_policy" "allow_describe_cluster" {
-  name = "AllowEKSDescribe"
+resource "aws_iam_role_policy" "allow_eks_update_config" {
+  name = "AllowEKSUpdateClusterConfig"
   role = aws_iam_role.ec2_eks_access_role.id
 
   policy = jsonencode({
@@ -24,13 +24,15 @@ resource "aws_iam_role_policy" "allow_describe_cluster" {
       {
         Effect   = "Allow",
         Action   = [
-          "eks:DescribeCluster"
+          "eks:DescribeCluster",
+          "eks:UpdateClusterConfig"
         ],
         Resource = "*"
       }
     ]
   })
 }
+
 
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "EC2EKSAccessProfile"
