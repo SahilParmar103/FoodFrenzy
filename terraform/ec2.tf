@@ -14,24 +14,26 @@ resource "aws_iam_role" "ec2_eks_access_role" {
     }]
   })
 }
-resource "aws_iam_role_policy" "allow_eks_update_config" {
-  name = "AllowEKSUpdateClusterConfig"
+resource "aws_iam_role_policy" "eks_control_permissions" {
+  name = "EKSControlAccess"
   role = aws_iam_role.ec2_eks_access_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "eks:DescribeCluster",
-          "eks:UpdateClusterConfig"
+          "eks:UpdateClusterConfig",
+          "eks:AccessKubernetesApi"
         ],
         Resource = "*"
       }
     ]
   })
 }
+
 
 
 resource "aws_iam_instance_profile" "ec2_profile" {
