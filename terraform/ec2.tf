@@ -41,10 +41,6 @@ resource "aws_iam_role_policy_attachment" "eks_access_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
-resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "EC2EKSAccessProfile"
-  role = aws_iam_role.ec2_eks_access_role.name
-}
 
 # -----------------------------
 # Security Group
