@@ -28,18 +28,14 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.31"
 
-  cluster_name    = "eks-dev-cluster2"
+  cluster_name    = "${local.name}-cluster"
   cluster_version = "1.31"
 
-  cluster_endpoint_public_access            = true
-  enable_cluster_creator_admin_permissions  = true
+  cluster_endpoint_public_access           = true
+  enable_cluster_creator_admin_permissions = true
 
-  vpc_id     = "vpc-07d6d539f6fea04ff"
-  subnet_ids = [
-    "subnet-0379237fc995b8e91",
-    "subnet-01edbfe6e2fe4af5a",
-    "subnet-0697fa3ca382ef8ca"
-  ]
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
 
   eks_managed_node_groups = {
     default = {
@@ -65,3 +61,4 @@ module "eks" {
     Terraform   = "true"
   }
 }
+
