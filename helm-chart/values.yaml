@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: 474668397798.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy
-  tag: latest
+  tag: f4a037f69b37c7b1258397d4e6d396e7ba212adf
   pullPolicy: IfNotPresent
 
 service:
