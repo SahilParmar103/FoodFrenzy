@@ -1,9 +1,21 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.67.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.region_name
+}
 
 
 # STEP1: CREATE SG
 resource "aws_security_group" "my-sg" {
-  name        = "JENKINS-SERVER-SG"
-  description = "Jenkins Server Ports"
+  name        = "SONAR-SERVER-SG"
+  description = "Sonar Server Ports"
   vpc_id      = module.vpc.vpc_id
   
   # Port 22 is required for SSH Access
