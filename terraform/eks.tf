@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+# IAM Role for EKS Managed Node Group
 data "aws_iam_policy_document" "eks_node_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -28,18 +42,22 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.31"
 
-  cluster_name    = "${local.name}-cluster"
+  cluster_name    = "eks-cluster"
   cluster_version = "1.31"
 
   cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
 
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnets
+  vpc_id = "vpc-03a022d7845eb659b"
+  subnet_ids = [
+    "subnet-092f43e61e9d308d4",
+    "subnet-0f175fc25b14adc2c",
+    "subnet-09e93a264ee909acd"
+  ]
 
   eks_managed_node_groups = {
     default = {
-      instance_types = ["t3.medium"]
+      instance_types = ["t2.medium"]
       desired_size   = 2
       min_size       = 1
       max_size       = 3
