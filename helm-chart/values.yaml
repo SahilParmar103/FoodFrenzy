@@ -2,19 +2,19 @@ replicaCount: 2
 
 image:
   repository: 474668397798.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy
-  tag: f4a037f69b37c7b1258397d4e6d396e7ba212adf
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
   port: 80
 
-resources: {}
-
 env:
   - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://mysql:3306/FoodFrenzy?createDatabaseIfNotExist=true
+    value: jdbc:mysql://mysql:3306/FoodFrenzy
   - name: SPRING_DATASOURCE_USERNAME
     value: root
   - name: SPRING_DATASOURCE_PASSWORD
     value: root
+
+resources: {}
