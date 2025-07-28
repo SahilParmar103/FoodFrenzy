@@ -3,6 +3,7 @@
 resource "aws_security_group" "my-sg" {
   name        = "SONAR-SERVER-SG"
   description = "Sonar Server Ports"
+  vpc_id      = var.vpc_id
   
   # Port 22 is required for SSH Access
   ingress {
