@@ -6,5 +6,6 @@ ec2_key_pair = "My-key"
 volume_size   = 30
 region_name   = "us-east-1"
 server_name   = "SONAR-SERVER"
+vpc_id = "vpc-03a022d7845eb659b"
 
 
