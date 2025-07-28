@@ -126,7 +126,7 @@ resource "aws_security_group" "my-sg" {
 resource "aws_instance" "my-ec2" {
   ami           = var.ami   
   instance_type = var.instance_type
-  key_name      = var.ec2_private_key
+  key_name      = "My-key" 
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   
   root_block_device {
