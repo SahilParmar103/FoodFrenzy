@@ -27,3 +27,7 @@ variable "ec2_private_key" {
   type        = string
   sensitive   = true
 }
+variable "vpc_id" {
+  description = "The ID of the VPC to associate the security group with"
+  type        = string
+}
