@@ -127,6 +127,7 @@ resource "aws_instance" "my-ec2" {
   ami           = var.ami   
   instance_type = var.instance_type
   key_name      = "My-key" 
+  subnet_id     = var.subnet_id 
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   
   root_block_device {
