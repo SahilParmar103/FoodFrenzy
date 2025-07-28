@@ -22,3 +22,8 @@ variable "server_name" {
   description = "EC2 Server Name"
   type        = string
 }
+variable "ec2_private_key" {
+  description = "Private key content to SSH into EC2 instance"
+  type        = string
+  sensitive   = true
+}
