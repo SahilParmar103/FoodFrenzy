@@ -7,5 +7,5 @@ volume_size   = 30
 region_name   = "us-east-1"
 server_name   = "SONAR-SERVER"
 vpc_id = "vpc-03a022d7845eb659b"
-
+subnet_id = "subnet-092f43e61e9d308d4"
 
