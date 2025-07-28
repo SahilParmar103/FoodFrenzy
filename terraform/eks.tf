@@ -7,10 +7,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-}
-
 # IAM Role for EKS Managed Node Group
 data "aws_iam_policy_document" "eks_node_assume_role_policy" {
   statement {
