@@ -10,3 +10,11 @@ service:
   port: 80
 
 resources: {}
+
+env:
+  - name: SPRING_DATASOURCE_URL
+    value: jdbc:mysql://mysql:3306/FoodFrenzy?createDatabaseIfNotExist=true
+  - name: SPRING_DATASOURCE_USERNAME
+    value: root
+  - name: SPRING_DATASOURCE_PASSWORD
+    value: root
