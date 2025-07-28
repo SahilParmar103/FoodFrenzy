@@ -5,8 +5,8 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: foodfrenzy
-  EKS_CLUSTER_NAME: foodfrenzy-eks
+  ECR_URI: 474668397798.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy
+  EKS_CLUSTER_NAME: eks-cluster
 
 jobs:
   deploy:
@@ -30,8 +30,7 @@ jobs:
           --name ${{ env.EKS_CLUSTER_NAME }}
 
     - name: Verify Kube Access
-      run: |
-        kubectl get nodes
+      run: kubectl get nodes
 
     - name: Install Helm
       uses: azure/setup-helm@v3
@@ -39,6 +38,7 @@ jobs:
     - name: Deploy with Helm
       run: |
         helm upgrade --install foodfrenzy ./helm-chart \
-          --set image.repository=474668397798.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy \
+          --set image.repository=${{ env.ECR_URI }} \
           --set image.tag=latest \
-          --namespace default
+          --namespace default \
+          --create-namespace
