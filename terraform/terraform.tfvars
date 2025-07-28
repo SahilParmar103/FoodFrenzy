@@ -1,12 +1,18 @@
-aws_region   = "us-east-1"
-region_name = "us-east-1"
+
 ec2_key_pair = "My-key"
-server_name = "My-server"
-key_name = "key"
-volume_size = 30
+
+
+
+
+# DEFINE ALL YOUR VARIABLES HERE
+
 instance_type = "t2.medium"
-ami = "ami-020cba7c55df1f615"
-rds_db_username    = "admin"
-rds_db_password    = "SuperSecurePass123"
-rds_instance_class = "db.t3.micro"
-rds_storage_size   = 20
+ami           = "ami-0e86e20dae9224db8"   # Ubuntu 24.04
+key_name      = "key"                     # Replace with your key-name without .pem extension
+volume_size   = 30
+region_name   = "us-east-1"
+server_name   = "JENKINS-SERVER"
+
+# Note: 
+# a. First create a pem-key manually from the AWS console
+# b. Copy it in the same directory as your terraform code
