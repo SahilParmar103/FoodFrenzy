@@ -145,7 +145,6 @@ resource "aws_instance" "my-ec2" {
       private_key = var.ec2_private_key # replace with your key-name 
       user        = "ubuntu"
       host        = self.public_ip
-      private_key = var.ec2_private_key
     }
 
     inline = [
