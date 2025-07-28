@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: 474668397798.dkr.ecr.us-east-1.amazonaws.com/foodfrenzy
-  tag: latest
+  tag: f4a037f69b37c7b1258397d4e6d396e7ba212adf
   pullPolicy: IfNotPresent
 
 service:
@@ -11,10 +11,16 @@ service:
 
 env:
   - name: SPRING_DATASOURCE_URL
-    value: jdbc:mysql://mysql:3306/FoodFrenzy
+    value: jdbc:mysql://mysql.default.svc.cluster.local:3306/FoodFrenzy?createDatabaseIfNotExist=true
   - name: SPRING_DATASOURCE_USERNAME
     value: root
   - name: SPRING_DATASOURCE_PASSWORD
     value: root
+  - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+    value: com.mysql.cj.jdbc.Driver
+  - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+    value: update
+  - name: SPRING_JPA_DATABASE_PLATFORM
+    value: org.hibernate.dialect.MySQLDialect
 
 resources: {}
